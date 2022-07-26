@@ -51,7 +51,7 @@ body{
     color:white;
 }
 .modal-cont{
-    display: flex;
+    display: none;
     height: 50vh;
     background-color:lightblue;
     width: 45vw;
