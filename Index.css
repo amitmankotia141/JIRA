@@ -80,3 +80,36 @@ align-items: center;
 height: 12%;
 width: 40%;
 }
+.ticket-cont{
+    height: 12rem;
+    width: 15rem;
+    background-color:#f1f2f6;
+}
+.ticket-color{
+    height: 1rem;
+}
+.ticket-id{
+    height: 2rem;
+    background-color: red;
+}
+.ticket-area{
+height: calc(100% - 1rem - 2rem );
+font-size: 1.5rem;
+}
+.ticket-lock{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 6rem;
+    margin-right: 0.5rem;
+    font-size: 1.5rem;
+}
+.main-cont{
+    display: flex;
+    justify-content:center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin: 2rem;
+}
+.active{
+    border: 5px solid red;
+}
