@@ -6,7 +6,9 @@ const colors=["lightpink","lightgreen","lightblue","black"];
 let modalPriorityColor=colors[3];
 const mainCont=document.querySelector(".main-cont");
 const allPriorityColor=document.querySelectorAll(".priority-color");
-console.log(allPriorityColor);
+const toolBoxColors=document.querySelectorAll(".toolbox-color-cont>*");
+let ticketsArr=[];
+// console.log(toolBoxColors);
 // console.log(modalcont);
 // console.log(mybtn);
 var isModalPresent=false;
@@ -30,8 +32,8 @@ isModalPresent=false;
 textArea.value="";
 }
 })
-function createTicket(ticketColor,data){
-    let id=uid();
+function createTicket(ticketColor,data,ticketId){
+    let id=ticketId||uid();
     let ticketCont=document.createElement("div");
     ticketCont.setAttribute("class","ticket-cont");
     ticketCont.innerHTML=`
@@ -43,6 +45,20 @@ function createTicket(ticketColor,data){
     </div>
     `;
     mainCont.appendChild(ticketCont);
+    if(!ticketId){
+    ticketsArr.push({
+        ticketColor,
+        ticketId:id,
+        ticketData:data,
+    })
+    localStorage.setItem("tickets",JSON.stringify(ticketsArr));
+}
+}
+if(localStorage.getItem("tickets")){
+ticketsArr=JSON.parse(localStorage.getItem("tickets"));
+ticketsArr.forEach((ticketObj)=>{
+createTicket(ticketObj.ticketColor,ticketObj.ticketId,ticketObj.ticketData,ticketObj.ticketId);
+})
 }
 allPriorityColor.forEach((colorElement)=>{
 colorElement.addEventListener("click",function(){
@@ -53,3 +69,9 @@ colorElement.addEventListener("click",function(){
     modalPriorityColor=colorElement.classList[0];
 })
 })
+// for(let i=0;i<toolBoxColors.length;i++){
+// toolBoxColors[i].addEventListener("click",function(){
+// let color=toolBoxColors[i].classList[0];
+
+// })
+// }
