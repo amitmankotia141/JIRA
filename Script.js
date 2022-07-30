@@ -25,7 +25,7 @@ isModalPresent=!isModalPresent;
 modalCont.addEventListener("keydown",function(e){
 console.log(e)
 if(e.key=="Shift"){
-console.log(textArea.value);
+// console.log(textArea.value);
 createTicket(modalPriorityColor,textArea.value);
 modalCont.style.display="none";
 isModalPresent=false;
@@ -57,7 +57,7 @@ function createTicket(ticketColor,data,ticketId){
 if(localStorage.getItem("tickets")){
 ticketsArr=JSON.parse(localStorage.getItem("tickets"));
 ticketsArr.forEach((ticketObj)=>{
-createTicket(ticketObj.ticketColor,ticketObj.ticketId,ticketObj.ticketData,ticketObj.ticketId);
+createTicket(ticketObj.ticketColor,ticketObj.ticketData,ticketObj.ticketId,);
 })
 }
 allPriorityColor.forEach((colorElement)=>{
@@ -69,9 +69,12 @@ colorElement.addEventListener("click",function(){
     modalPriorityColor=colorElement.classList[0];
 })
 })
-// for(let i=0;i<toolBoxColors.length;i++){
-// toolBoxColors[i].addEventListener("click",function(){
-// let color=toolBoxColors[i].classList[0];
-
-// })
-// }
+for(let i=0;i<toolBoxColors.length;i++){
+toolBoxColors[i].addEventListener("click",function(){
+let currColor=toolBoxColors[i].classList[0];
+let filteredTickets=ticketsArr.filter((ticketObj)=>{
+return ticketObj.ticketColor==currColor;
+})
+console.log(filteredTickets);
+})
+}
