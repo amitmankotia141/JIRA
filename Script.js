@@ -8,6 +8,7 @@ const mainCont=document.querySelector(".main-cont");
 const allPriorityColor=document.querySelectorAll(".priority-color");
 const toolBoxColors=document.querySelectorAll(".toolbox-color-cont>*");
 let ticketsArr=[];
+const removeBtn=document.querySelector(".remove-btn")
 // console.log(toolBoxColors);
 // console.log(modalcont);
 // console.log(mybtn);
@@ -33,26 +34,27 @@ textArea.value="";
 }
 })
 function createTicket(ticketColor,data,ticketId){
-    let id=ticketId||uid();
-    let ticketCont=document.createElement("div");
-    ticketCont.setAttribute("class","ticket-cont");
-    ticketCont.innerHTML=`
-    <div class="ticket-color ${ticketColor}"></div>
-    <div class="ticket-id">#${id}</div>
-    <div class="task-area">${data}</div>
-    <div class="ticket-lock">
-    <i class="fa-solid fa-lock"></i>
-    </div>
-    `;
-    mainCont.appendChild(ticketCont);
-    if(!ticketId){
-    ticketsArr.push({
-        ticketColor,
-        ticketId:id,
-        ticketData:data,
-    })
-    localStorage.setItem("tickets",JSON.stringify(ticketsArr));
+let id=ticketId||uid();
+let ticketCont=document.createElement("div");
+ticketCont.setAttribute("class","ticket-cont");
+ticketCont.innerHTML=`
+<div class="ticket-color ${ticketColor}"></div>
+<div class="ticket-id">#${id}</div>
+<div class="task-area">${data}</div>
+<div class="ticket-lock">
+<i class="fa-solid fa-lock"></i>
+</div>
+`;
+mainCont.appendChild(ticketCont);
+if(!ticketId){
+ticketsArr.push({
+ticketColor,
+ticketId:id,
+ticketData:data,
+})
+localStorage.setItem("tickets",JSON.stringify(ticketsArr));
 }
+handleRemoval(ticketCont,id)
 }
 if(localStorage.getItem("tickets")){
 ticketsArr=JSON.parse(localStorage.getItem("tickets"));
@@ -62,11 +64,11 @@ createTicket(ticketObj.ticketColor,ticketObj.ticketData,ticketObj.ticketId,);
 }
 allPriorityColor.forEach((colorElement)=>{
 colorElement.addEventListener("click",function(){
-    allPriorityColor.forEach((el)=>{
-        el.classList.remove("active");
-    })
-    colorElement.classList.add("active");
-    modalPriorityColor=colorElement.classList[0];
+allPriorityColor.forEach((el)=>{
+el.classList.remove("active");
+})
+colorElement.classList.add("active");
+modalPriorityColor=colorElement.classList[0];
 })
 })
 for(let i=0;i<toolBoxColors.length;i++){
@@ -81,7 +83,52 @@ allTickets.forEach((ticket)=>{
 ticket.remove();
 })
 filteredTickets.forEach((ticket)=>{
-createTicket(ticket.ticketColor,ticket.data,ticket.ticketId);
+createTicket(ticket.ticketColor,ticket.ticketData,ticket.ticketId);
 })
 })
+toolBoxColors[i].addEventListener("dblclick",function(){
+let allTickets=document.querySelectorAll(".ticket-cont");
+allTickets.forEach((ticket)=>{
+ticket.remove();
+})
+ticketsArr.forEach((ticket)=>{
+createTicket(ticket.ticketColor,ticket.ticketData,ticket.ticketId);
+})    
+})
+}
+var isRemoveBtnActive=false;
+removeBtn.addEventListener("click",function(e){
+console.log(e)
+if(!isRemoveBtnActive){
+removeBtn.style.color="red";
+}
+else if(isRemoveBtnActive){
+removeBtn.style.color="white";
+}
+isRemoveBtnActive=!isRemoveBtnActive; 
+})
+function handleRemoval(ticketCont,id){
+ticketCont.addEventListener("click",function(){
+if(!isRemoveBtnActive){
+return;
+}
+let idx=getTicketIdx(id);
+ticketsArr.splice(idx,1)
+localStorage.setItem("tickets",JSON.stringify(ticketsArr))
+ticketCont.remove();
+})
+}
+// function getTicketIdx(id){
+// ticketsArr.forEach((ticketObj)=>{
+// if(ticketObj.ticketId==id){
+// let idx=ticketsArr.indexOf(ticketToBeDeleted);
+// return idx;
+// }
+// })
+// }
+function getTicketIdx(id){
+let idx =ticketsArr.findIndex((ticketObj)=>{
+return ticketObj.ticketId==id
+})
+return idx;
 }
