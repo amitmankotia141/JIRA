@@ -76,5 +76,12 @@ let filteredTickets=ticketsArr.filter((ticketObj)=>{
 return ticketObj.ticketColor==currColor;
 })
 console.log(filteredTickets);
+let allTickets=document.querySelectorAll(".ticket-cont");
+allTickets.forEach((ticket)=>{
+ticket.remove();
+})
+filteredTickets.forEach((ticket)=>{
+createTicket(ticket.ticketColor,ticket.data,ticket.ticketId);
+})
 })
 }
