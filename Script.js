@@ -9,6 +9,8 @@ const allPriorityColor=document.querySelectorAll(".priority-color");
 const toolBoxColors=document.querySelectorAll(".toolbox-color-cont>*");
 let ticketsArr=[];
 const removeBtn=document.querySelector(".remove-btn")
+const allTickets=document.querySelectorAll(".main-cont>.ticket-cont");
+console.log(allTickets);
 // console.log(toolBoxColors);
 // console.log(modalcont);
 // console.log(mybtn);
@@ -55,6 +57,8 @@ ticketData:data,
 localStorage.setItem("tickets",JSON.stringify(ticketsArr));
 }
 handleRemoval(ticketCont,id)
+handlePriorityColor(ticketCont,id);
+handleLock(ticketCont,id);
 }
 if(localStorage.getItem("tickets")){
 ticketsArr=JSON.parse(localStorage.getItem("tickets"));
@@ -128,7 +132,42 @@ ticketCont.remove();
 // }
 function getTicketIdx(id){
 let idx =ticketsArr.findIndex((ticketObj)=>{
-return ticketObj.ticketId==id
+return ticketObj.ticketId==id;
 })
 return idx;
+}
+function handlePriorityColor(ticketCont,id){
+    let ticketColor=ticketCont.querySelector(".ticket-color")
+    ticketColor.addEventListener("click",function(){
+        let currTicketColor=ticketColor.classList[1];
+        let currTicketColorIdx=colors.indexOf(currTicketColor);
+        let newTicketColorIdx=(currTicketColorIdx+1)%colors.length;
+        let newTicketColor=colors[newTicketColorIdx];
+        ticketColor.classList.remove(currTicketColor);
+        ticketColor.classList.add(newTicketColor);
+        let idx=getTicketIdx(id);
+        ticketsArr[idx].ticketColor=newTicketColor;
+        localStorage.setItem("tickets",JSON.stringify(ticketsArr));
+    })
+}
+const unlock="fa-lock-open"
+function handleLock(ticketCont,id){
+let ticketLock=ticketCont.querySelector(".ticket-lock");
+let lock=ticketLock.children[0].classList[1];
+let ticketTaskArea=ticketCont.querySelector(".task-area")
+ticketLock.addEventListener("click",function(){
+    if(ticketLock.children[0].classList.contains(lock)){
+        ticketLock.children[0].classList.remove(lock);
+        ticketLock.children[0].classList.add(unlock);
+        ticketTaskArea.setAttribute("contenteditable","true");
+    }
+    else if(ticketLock.children[0].classList.contains(unlock)){
+        ticketLock.children[0].classList.add(lock);
+        ticketLock.children[0].classList.remove(unlock);
+        ticketTaskArea.setAttribute("contenteditable","false");
+    }
+    let idx=getTicketIdx(id);
+    ticketsArr[idx].ticketData=ticketTaskArea.innerText;
+    localStorage.setItem("tickets",JSON.stringify(ticketsArr));
+})
 }
